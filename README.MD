@@ -274,29 +274,23 @@ Ensure that the tagged images from your Jenkinsfile have a prefix that suggests 
 Verify that the images pushed from the CI can be found in the registry.
 
 
-Migration-to-the-Сloud-with-Containerization
+# Part 2
+
+**Docker Compose**
+
+docker-compose -f todo.yml up .
+
+Docker Volumes loccations
+
+LINUX AND MAC
+/var/lib/docker/volumes
+
+Fpr Mac specifically , run this first
+screen /Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
 
 
-# N.B: For monitoring purpose
 
-We need to install some plugins
 
-Go to Manage Jenkins > 
-
-            Prometheus Metrics  
-
-Go to Manage Jenkins > Cloud bees usage simple
-
-Then Install
-
-Go back to configure sytem > Prometheus
-
-then configure
-
-The endpoint is `<public-ip>:8080/prometheus/`
-
-targets =['<pub-ip>:8080']
-metrics_path = /prometheus/
 
 
 

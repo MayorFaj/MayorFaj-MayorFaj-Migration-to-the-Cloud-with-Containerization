@@ -6,6 +6,8 @@ pipeline{
         max = 20
         random_num = "${Math.abs(new Random().nextInt(max+1))}"
         PASSWORD = credentials('DOCKERHUB_PASSWORD')
+        imageName = "mayorfaj/php-todo1-app:${TAG}"
+        containerName = "my-todo-app-${random_num}"
     }
 
     stages{
@@ -16,19 +18,18 @@ pipeline{
                 }
             }
         }
-
+    
         stage('Checkout Git') {
             steps {
-                git branch: 'main', credentialsId: 'MayorFaj', url: 'https://github.com/MayorFaj/Migration-to-the-Cloud-with-Containerization.git'
+                git branch: 'main', credentialsId: 'my-github-id', url: 'https://github.com/MayorFaj/Migration-to-the-Cloud-with-Containerization.git'
             }
         }
 
         stage('Building application ') {
             steps {
                 script {
-                    
                     sh " docker login -u mayorfaj -p ${env.PASSWORD}"
-                    sh " docker build -t mayorfaj/php-todo-app:${env.TAG} ."
+                    sh " docker build -t ${imageName} ."
                 }
             }
         }
@@ -36,7 +37,7 @@ pipeline{
         stage('Creating docker container') {
             steps {
                 script {
-                    sh " docker run -d --name my-todo-app-${env.random_num} -p 8000:8000 mayorfaj/php-todo-app:${env.TAG}"
+                    sh " docker run -d --name ${containerName} -p 8000:8000 ${imageName}"
                 }
             }
         }
@@ -44,8 +45,11 @@ pipeline{
         stage("Smoke Test") {
             steps {
                 script {
-                    sh "sleep 60"
-                    sh "curl -I 54.167.99.240:8000"
+                    def response = sh(script: 'curl -s -o /dev/null -w "%{http_code}" http://35.157.144.183:8080/', returnStdout: true).trim()
+                    echo "HTTP Status Code: ${response}"
+                    if (response != '200') {
+                        error "Test failed! HTTP Status Code is not 200."
+                    }
                 }
             }
         }
@@ -53,7 +57,7 @@ pipeline{
         stage("Publish to Registry") {
             steps {
                 script {
-                    sh " docker push mayorfaj/PHP-TODO-APP:1.0.0:${env.TAG}"
+                    sh " docker push ${imageName}"
                 }
             }
         }
@@ -61,9 +65,9 @@ pipeline{
         stage ('Clean Up') {
             steps {
                 script {
-                    sh " docker stop my-todo-app-${env.random_num}"
-                    sh " docker rm my-todo-app-${env.random_num}"
-                    sh " docker rmi mayorfaj/PHP-TODO-APP:1.0.0:${env.TAG}"
+                    sh " docker stop ${containerName}"
+                    sh " docker rm ${containerName}"
+                    sh " docker rmi ${imageName}"
                 }
             }
         }
@@ -76,5 +80,5 @@ pipeline{
             }
         }
     }
-   
 }
+   
