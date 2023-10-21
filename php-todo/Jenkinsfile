@@ -21,7 +21,7 @@ pipeline{
     
         stage('Checkout Git') {
             steps {
-                git branch: 'main', credentialsId: 'my-github-id', url: 'https://github.com/MayorFaj/Migration-to-the-Cloud-with-Containerization.git'
+                git branch: 'feature', credentialsId: 'my-github-id', url: 'https://github.com/MayorFaj/Migration-to-the-Cloud-with-Containerization.git'
             }
         }
 
@@ -30,7 +30,7 @@ pipeline{
                 script {
                     sh " docker login -u mayorfaj -p ${env.PASSWORD}"
                     sh " cd php-todo"
-                    
+
                     sh " docker build -t ${imageName} ."
                 }
             }
