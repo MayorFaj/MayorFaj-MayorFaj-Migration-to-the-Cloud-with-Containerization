@@ -27,10 +27,12 @@ pipeline{
 
         stage('Building application ') {
             steps {
+                dir('/php-todo') {
                 script {
                     sh " docker login -u mayorfaj -p ${env.PASSWORD}"
                     sh " docker build -t ${imageName} ."
                 }
+            }
             }
         }
 
