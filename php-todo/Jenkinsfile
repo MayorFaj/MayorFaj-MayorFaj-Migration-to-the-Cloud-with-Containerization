@@ -29,6 +29,7 @@ pipeline{
             steps {
                 dir('/php-todo') {
                 script {
+                    sh "echo \$PASSWORD"
                     sh " docker login -u mayorfaj -p ${env.PASSWORD}"
                     sh " docker build -t ${imageName} ."
                 }
