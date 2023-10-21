@@ -28,8 +28,8 @@ pipeline{
         stage('Building application ') {
             steps {
                 script {
-                    sh ' docker login -u mayorfaj -p ${PASSWORD}'
-                    sh " docker build -t ${imageName} ."
+                    sh 'docker login -u mayorfaj -p ${PASSWORD}'
+                    sh "docker build -t ${imageName} ."
                 }
             }
         }
