@@ -30,7 +30,6 @@ pipeline{
                 script {
                     sh " docker login -u mayorfaj -p ${env.PASSWORD} "
                     sh " cd php "
-                    //sh " chmod +x app.sh "
                     sh " docker build -t ${imageName} . "
                 }
             }
