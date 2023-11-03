@@ -9,6 +9,7 @@ USER root
 # ENV DB_PASSWORD=$MYSQL_PASS
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
+
 # Set the working directory in the container
 WORKDIR /var/www/html
 
